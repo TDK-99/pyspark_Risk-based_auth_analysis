@@ -1,2 +1,2 @@
 # pyspark_internet_speed_analysis
-End-to-end internet speed analysis on a 15 GB+ Kaggle dataset using PySpark, covering data ingestion, cleaning, aggregation, and exploratory insights at scale.
+Scalable analysis of global internet speed measurements built on a 15 GB+ Kaggle dataset. The project leverages PySpark to handle data ingestion, cleaning, transformation, and exploratory analysis that would be impractical with pandas alone. It demonstrates partitioned reads, efficient aggregations, and large-scale data profiling in a local or cluster Spark environment.

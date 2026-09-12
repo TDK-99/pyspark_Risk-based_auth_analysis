@@ -6,6 +6,7 @@ services:
       - SPARK_NO_DAEMONIZE=true
     volumes:
       - .:/app
+      - /home/valeriomezzopra/.cache/kagglehub/datasets/dasgroup/rba-dataset/versions/1:/data
     ports:
       - "8080:8080"
       - "7077:7077"

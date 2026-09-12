@@ -1,2 +1,1 @@
-# pyspark_internet_speed_analysis
-Scalable analysis of global internet speed measurements built on a 15 GB+ Kaggle dataset. The project leverages PySpark to handle data ingestion, cleaning, transformation, and exploratory analysis that would be impractical with pandas alone. It demonstrates partitioned reads, efficient aggregations, and large-scale data profiling in a local or cluster Spark environment.
+PySpark analysis of 33M+ login attempts from a large-scale SSO service, exploring patterns in authentication risk factors (IP geolocation, device type, RTT latency) using a distributed Spark cluster on Podman.

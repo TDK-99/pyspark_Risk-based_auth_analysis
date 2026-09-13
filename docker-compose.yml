@@ -6,7 +6,6 @@ services:
       - SPARK_NO_DAEMONIZE=true
     volumes:
       - .:/app
-      - /home/valeriomezzopra/.cache/kagglehub/datasets/dasgroup/rba-dataset/versions/1:/data
     ports:
       - "8080:8080"
       - "7077:7077"
@@ -17,7 +16,6 @@ services:
     command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
     volumes:
       - .:/app
-      - /home/valeriomezzopra/.cache/kagglehub/datasets/dasgroup/rba-dataset/versions/1:/data
     ports:
       - "8888:8888"
     depends_on:

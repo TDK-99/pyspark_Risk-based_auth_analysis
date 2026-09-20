@@ -220,3 +220,7 @@ __marimo__/
 #develop
 
 develop.ipynb
+
+#ivy cache
+
+/ivy-cache

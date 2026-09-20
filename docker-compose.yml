@@ -19,6 +19,7 @@ services:
       -  ./ivy-cache:/tmp/.ivy2:z
     ports:
       - "8888:8888"
+      - "4040:4040"
     depends_on:
       - spark-master
 

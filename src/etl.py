@@ -30,6 +30,7 @@ try:
         Key="rba-dataset.parquet/_SUCCESS"
     )
     df = spark.read.parquet(parquet_path)
+    print("parquet already dowload")
 except:
     df = spark.read.csv(
         "s3a://sparkanalysisauth/rba-dataset.csv",
@@ -37,3 +38,4 @@ except:
         inferSchema=True
     )
     df.write.parquet(parquet_path)
+    print("parquet is not exist, dowload file...")

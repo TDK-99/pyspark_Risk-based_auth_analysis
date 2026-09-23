@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 import boto3
-from pyspark.sql.functions import col, count, when
+from pyspark.sql.functions import col, count, when, sum as _sum,
+
 
 
 def data_validation(df):

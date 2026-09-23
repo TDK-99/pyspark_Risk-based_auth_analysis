@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 import boto3
-from pyspark.sql.functions import col, count, when, sum as _sum
+from pyspark.sql.functions import col, count, when, sum as _sum, countDistinct
 import pandas as pd
 
 
@@ -110,6 +110,17 @@ def data_validation(df):
     
     if not failed.empty:
         raise ValueError(f"COLUMN_NULL_VALUES: column {failed['col'].tolist()} exceed the max of null value")
+
+
+    # CHECK INDEX COL HAVE ALL DISTINCT VALUE
+
+    distinct_index = df.select([
+        countDistinct(col("index"))]).collect()[0][0]
+
+    # confront with  count row
+
+    if df_count != distinct_index:
+        raise ValueError("Col index dont have all distinct value")
 
 
 

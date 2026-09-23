@@ -5,6 +5,8 @@ from pyspark.sql import SparkSession
 load_dotenv("/app/.env")
 
 
+# all setting for the session builder
+
 spark = SparkSession.builder \
     .appName("ReadDataFromS3") \
     .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.4.1") \
@@ -18,6 +20,8 @@ spark = SparkSession.builder \
 
 
 
+
+# if the data is already in s3 it import else start download
 
 import boto3
 

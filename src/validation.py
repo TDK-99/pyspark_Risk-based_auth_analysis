@@ -1,8 +1,10 @@
 from pyspark.sql import SparkSession
 import boto3
-from pyspark.sql.functions import col, count, when, sum as _sum, countDistinct
+from pyspark.sql.functions import col, count, when, sum as _sum, countDistinct, length
 import pandas as pd
 
+
+from src.config_import import validate_data
 
 
 
@@ -122,5 +124,24 @@ def data_validation(df):
     if df_count != distinct_index:
         raise ValueError("Col index dont have all distinct value")
 
+
+    # CHECK ALL COUNTRY ARE ONLY 2 LETTER
+
+    from pyspark.sql.functions import col,
+
+    invalid_countries = df.filter(
+        (length(col("Country")) > 2) | (length(col("Country")) < 2)
+    ).groupBy("Country") \
+    .agg(count("*").alias("cnt")) \
+    .orderBy("cnt", ascending=False) \
+    .limit(50) \
+    .collect()
+
+    result_dict = {row["Country"]: row["cnt"] for row in invalid_countries}
+
+    country_df = pd.DataFrame(result_dict.items(), columns=["country", "cnt"])
+
+    if not country_df.empty:
+        raise ValueError(f"There is a Country with more than 2 letters or less: {result_dict}")
 
 

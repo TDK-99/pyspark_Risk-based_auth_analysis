@@ -52,10 +52,10 @@ def data_validation(df):
     not_null_col = ["index", "User ID", "IP Address", "Login Timestamp"]
 
     for c in not_null_col:
-    # Conta quante righe hanno valori nulli nella colonna
+    # value null row count
         null_count = df.filter(col(c).isNull()).count()
     
-    # Se ci sono nulli, ma la colonna non è completamente vuota
+    # check if col have dont have null value if raise error
     if 0 < null_count < df.count():
         raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
 

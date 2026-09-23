@@ -1,6 +1,8 @@
 from pyspark.sql import SparkSession
 import boto3
 from pyspark.sql.functions import col, count, when, sum as _sum
+import pandas as pd
+
 
 
 
@@ -60,7 +62,56 @@ def data_validation(df):
         raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
 
 
+    # CHECK MAX VALUE % OF NULL VALUE IN COL
 
+    # % null x col
+    max_null_perc = {
+        "Region": 0.15,       
+        "City": 0.10,         
+        "Device Type": 0.01,  
+    }
+
+    # extract all col null row
+
+    null_counts = df.select([
+        count(when(col(c).isNull(), c)).alias(c) 
+        for c in df.columns
+    ]).collect()[0].asDict()
+
+
+    # trasform in dict and  after in dataframe
+
+    df_null = pd.DataFrame(null_counts.items(), columns=["col", "cont_null"])
+
+    df_limit_null = pd.DataFrame(max_null_perc.items(), columns=["col", "perc_null"])
+
+
+    df_count = df.select([count(col("index"))]).collect()[0].asDict()
+
+    df_count = pd.DataFrame(df_count.items(), columns=["col", "count"])
+
+    # count all row
+    
+    df_null["row"] = df_count["count"].iloc[0]
+
+
+    df_null = df_null.merge(df_limit_null,on="col", how="inner")
+
+    # calcultate % of null and check if exceed the value set
+
+    df_null["perc_null_df"] = ((df_null["cont_null"]/df_null["row"])*100).round(2)
+
+    df_null["perc_null_df"] = df_null["perc_null_df"].astype(float)
+    df_null["perc_null"] = df_null["perc_null"].astype(float)
+
+
+    failed = df_null[df_null["perc_null_df"] > df_null["perc_null"]]
+    failed["col"].tolist()
+
+    # raise error if col exceed mx value %
+    
+    if not failed.empty:
+        raise ValueError(f"COLUMN_NULL_VALUES: column {failed['col'].tolist()} exceed the max of null value")
 
 
 

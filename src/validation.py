@@ -86,13 +86,11 @@ def data_validation(df):
     df_limit_null = pd.DataFrame(max_null_perc.items(), columns=["col", "perc_null"])
 
 
-    df_count = df.select([count(col("index"))]).collect()[0].asDict()
-
-    df_count = pd.DataFrame(df_count.items(), columns=["col", "count"])
+    df_count = df.count()
 
     # count all row
     
-    df_null["row"] = df_count["count"].iloc[0]
+    df_null["row"] = df_count
 
 
     df_null = df_null.merge(df_limit_null,on="col", how="inner")

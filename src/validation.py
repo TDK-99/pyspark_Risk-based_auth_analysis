@@ -145,3 +145,13 @@ def data_validation(df):
         raise ValueError(f"There is a Country with more than 2 letters or less: {result_dict}")
 
 
+    # CHECK IF THE DF  HAVE EXPECTED ROW RANGE
+
+
+    expect_row_range = {"min": 30_000_000, "max": 100_000_000}
+
+
+    if df_count < expect_row_range["min"] or df_count > expect_row_range["max"]:
+        raise ValueError(f"Row count {df_count} out of range [{expect_row_range['min']}, {expect_row_range['max']}]")
+
+

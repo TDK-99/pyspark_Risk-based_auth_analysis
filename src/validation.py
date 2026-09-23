@@ -47,6 +47,20 @@ def data_validation(df):
         raise ValueError(f"DATA VALUE: match data type is {len(shared_items)} instead of 16") #raise error if  the  exp and data type is not full match
 
 
+    # CHECK NOT NULL COLUMN
+
+    not_null_col = ["index", "User ID", "IP Address", "Login Timestamp"]
+
+    for c in not_null_col:
+    # Conta quante righe hanno valori nulli nella colonna
+        null_count = df.filter(col(c).isNull()).count()
+    
+    # Se ci sono nulli, ma la colonna non è completamente vuota
+    if 0 < null_count < df.count():
+        raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
+
+
+
 
 
 

@@ -88,11 +88,11 @@ def data_validation(df):
     df_limit_null = pd.DataFrame(max_null_perc.items(), columns=["col", "perc_null"])
 
 
-    df_count = df.count()
+    total_row = df.count()
 
     # count all row
     
-    df_null["row"] = df_count
+    df_null["row"] = total_row
 
 
     df_null = df_null.merge(df_limit_null,on="col", how="inner")
@@ -121,7 +121,7 @@ def data_validation(df):
 
     # confront with  count row
 
-    if df_count != distinct_index:
+    if total_row != distinct_index:
         raise ValueError("Col index dont have all distinct value")
 
 
@@ -151,9 +151,15 @@ def data_validation(df):
     expect_row_range = {"min": 30_000_000, "max": 100_000_000}
 
 
-    if df_count < expect_row_range["min"] or df_count > expect_row_range["max"]:
-        raise ValueError(f"Row count {df_count} out of range [{expect_row_range['min']}, {expect_row_range['max']}]") # raise if row count go lower or up the range
+    if total_row < expect_row_range["min"] or total_row > expect_row_range["max"]:
+        raise ValueError(f"Row count {total_row} out of range [{expect_row_range['min']}, {expect_row_range['max']}]") # raise if row count go lower or up the range
     
 
     # CHECK FOR DUP ROW
+
+    distinct = df.distinct().count()
+    duplicates = total_row - distinct
+
+    if duplicates != 0:
+        raise ValueError(f"DUPLICATE_ROW: {duplicates} row are duplicated")
 

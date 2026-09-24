@@ -127,6 +127,8 @@ def data_validation(df):
 
     # CHECK ALL COUNTRY ARE ONLY 2 LETTER
 
+    # query for find the row that have more then 2 o less than 1 of country letter ex ITA instead of IT
+
     invalid_countries = df.filter(
         (length(col("Country")) > 2) | (length(col("Country")) < 2)
     ).groupBy("Country") \
@@ -140,7 +142,7 @@ def data_validation(df):
     country_df = pd.DataFrame(result_dict.items(), columns=["country", "cnt"])
 
     if not country_df.empty:
-        raise ValueError(f"There is a Country with more than 2 letters or less: {result_dict}")
+        raise ValueError(f"There is a Country with more than 2 letters or less: {result_dict}") # raise if find row with 1 or more than 2
 
 
     # CHECK IF THE DF  HAVE EXPECTED ROW RANGE
@@ -150,6 +152,8 @@ def data_validation(df):
 
 
     if df_count < expect_row_range["min"] or df_count > expect_row_range["max"]:
-        raise ValueError(f"Row count {df_count} out of range [{expect_row_range['min']}, {expect_row_range['max']}]")
+        raise ValueError(f"Row count {df_count} out of range [{expect_row_range['min']}, {expect_row_range['max']}]") # raise if row count go lower or up the range
+    
 
+    # CHECK FOR DUP ROW
 

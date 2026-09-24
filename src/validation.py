@@ -127,8 +127,6 @@ def data_validation(df):
 
     # CHECK ALL COUNTRY ARE ONLY 2 LETTER
 
-    from pyspark.sql.functions import col,
-
     invalid_countries = df.filter(
         (length(col("Country")) > 2) | (length(col("Country")) < 2)
     ).groupBy("Country") \

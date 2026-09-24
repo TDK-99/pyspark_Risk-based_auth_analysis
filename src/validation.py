@@ -161,5 +161,5 @@ def data_validation(df):
     duplicates = total_row - distinct
 
     if duplicates != 0:
-        raise ValueError(f"DUPLICATE_ROW: {duplicates} row are duplicated")
+        raise ValueError(f"DUPLICATE_ROW: {duplicates} row are duplicated") # raise if dup row
 

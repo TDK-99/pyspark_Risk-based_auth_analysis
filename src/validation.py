@@ -148,7 +148,7 @@ def data_validation(df):
     # CHECK IF THE DF  HAVE EXPECTED ROW RANGE
 
 
-    expect_row_range = {"min": 30_000_000, "max": 100_000_000}
+    expect_row_range = {"min": 30_000_000, "max": 60_000_000}
 
 
     if total_row < expect_row_range["min"] or total_row > expect_row_range["max"]:

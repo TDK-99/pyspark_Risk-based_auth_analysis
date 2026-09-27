@@ -39,3 +39,19 @@ def analysis(spark,df):
         ORDER BY hour
     """).toPandas()
  
+    # ============================================================
+    # 3. TOP COUNTRIES
+    # ============================================================
+    results["top_countries"] = spark.sql("""
+        SELECT Country,
+               COUNT(*) as total_logins,
+               SUM(CAST(`Is Attack IP` AS INT)) as attacks,
+               SUM(CAST(`Is Account Takeover` AS INT)) as takeovers,
+               ROUND(SUM(CAST(`Is Attack IP` AS INT)) / COUNT(*) * 100, 2) as attack_rate,
+               ROUND(SUM(CAST(`Is Account Takeover` AS INT)) / COUNT(*) * 100, 4) as takeover_rate
+        FROM logins
+        GROUP BY Country
+        HAVING COUNT(*) >= 1000
+        ORDER BY attacks DESC
+        LIMIT 20
+    """).toPandas()

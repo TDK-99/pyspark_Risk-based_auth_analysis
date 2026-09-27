@@ -69,3 +69,19 @@ def analysis(spark,df):
         GROUP BY `Device Type`
         ORDER BY total DESC
     """).toPandas()
+ 
+    # ============================================================
+    # 5. MOST TARGETED USERS
+    # ============================================================
+    results["targeted_users"] = spark.sql("""
+        SELECT `User ID`,
+               COUNT(*) as total_logins,
+               SUM(CAST(`Is Attack IP` AS INT)) as attacks,
+               SUM(CAST(`Is Account Takeover` AS INT)) as takeovers,
+               COUNT(DISTINCT Country) as countries,
+               COUNT(DISTINCT `IP Address`) as distinct_ips
+        FROM logins
+        GROUP BY `User ID`
+        ORDER BY attacks DESC
+        LIMIT 20
+    """).toPandas()

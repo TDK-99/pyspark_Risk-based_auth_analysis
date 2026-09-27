@@ -163,3 +163,11 @@ def data_validation(df):
     if duplicates != 0:
         raise ValueError(f"DUPLICATE_ROW: {duplicates} row are duplicated") # raise if dup row
 
+
+    # FILL DEVICE NULL TO UNKNOWN
+
+    df = df.na.fill("unknown", subset=["Device Type"])
+
+
+    
+

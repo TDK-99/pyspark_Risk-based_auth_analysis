@@ -3,6 +3,8 @@ from pyspark.sql import SparkSession
 
 def analysis(spark,df):
 
+    # GENERAL OVERVIEW KPI
+
     kpi_overview = spark.sql("""
         SELECT 
             COUNT(*) as total,

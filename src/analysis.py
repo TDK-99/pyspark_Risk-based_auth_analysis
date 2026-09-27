@@ -55,3 +55,17 @@ def analysis(spark,df):
         ORDER BY attacks DESC
         LIMIT 20
     """).toPandas()
+ 
+    # ============================================================
+    # 4. DEVICE PROFILING
+    # ============================================================
+    results["device_profiling"] = spark.sql("""
+        SELECT `Device Type`,
+               COUNT(*) as total,
+               SUM(CAST(`Is Attack IP` AS INT)) as attacks,
+               SUM(CASE WHEN `Is Attack IP` = false THEN 1 ELSE 0 END) as legit,
+               ROUND(SUM(CAST(`Is Attack IP` AS INT)) / COUNT(*) * 100, 2) as attack_rate
+        FROM logins
+        GROUP BY `Device Type`
+        ORDER BY total DESC
+    """).toPandas()

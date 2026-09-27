@@ -29,6 +29,8 @@ def analysis(spark,df):
     # ============================================================
     # 2. ATTACKS BY HOUR
     # ============================================================
+
+    
     results["attacks_by_hour"] = spark.sql("""
         SELECT HOUR(`Login Timestamp`) as hour,
                COUNT(*) as total_logins,
@@ -39,10 +41,13 @@ def analysis(spark,df):
         GROUP BY HOUR(`Login Timestamp`)
         ORDER BY hour
     """).toPandas()
+
  
     # ============================================================
     # 3. TOP COUNTRIES
     # ============================================================
+
+
     results["top_countries"] = spark.sql("""
         SELECT Country,
                COUNT(*) as total_logins,
@@ -56,10 +61,13 @@ def analysis(spark,df):
         ORDER BY attacks DESC
         LIMIT 20
     """).toPandas()
+
  
     # ============================================================
     # 4. DEVICE PROFILING
     # ============================================================
+
+
     results["device_profiling"] = spark.sql("""
         SELECT `Device Type`,
                COUNT(*) as total,
@@ -70,10 +78,13 @@ def analysis(spark,df):
         GROUP BY `Device Type`
         ORDER BY total DESC
     """).toPandas()
+
  
     # ============================================================
     # 5. MOST TARGETED USERS
     # ============================================================
+
+
     results["targeted_users"] = spark.sql("""
         SELECT `User ID`,
                COUNT(*) as total_logins,
@@ -86,10 +97,13 @@ def analysis(spark,df):
         ORDER BY attacks DESC
         LIMIT 20
     """).toPandas()
+
  
     # ============================================================
     # 6. RTT: ATTACKS VS LEGITIMATE
     # ============================================================
+
+
     results["rtt_comparison"] = spark.sql("""
         SELECT `Is Attack IP`,
                COUNT(*) as total,

@@ -25,6 +25,7 @@ def analysis(spark,df):
         FROM logins
     """).toPandas()
 
+
     # ============================================================
     # 2. ATTACKS BY HOUR
     # ============================================================
@@ -85,3 +86,20 @@ def analysis(spark,df):
         ORDER BY attacks DESC
         LIMIT 20
     """).toPandas()
+ 
+    # ============================================================
+    # 6. RTT: ATTACKS VS LEGITIMATE
+    # ============================================================
+    results["rtt_comparison"] = spark.sql("""
+        SELECT `Is Attack IP`,
+               COUNT(*) as total,
+               ROUND(AVG(`Round-Trip Time [ms]`), 2) as avg_rtt,
+               PERCENTILE_APPROX(`Round-Trip Time [ms]`, 0.5) as median_rtt,
+               PERCENTILE_APPROX(`Round-Trip Time [ms]`, 0.25) as p25_rtt,
+               PERCENTILE_APPROX(`Round-Trip Time [ms]`, 0.75) as p75_rtt,
+               PERCENTILE_APPROX(`Round-Trip Time [ms]`, 0.95) as p95_rtt
+        FROM logins
+        GROUP BY `Is Attack IP`
+    """).toPandas()
+ 
+    return results

@@ -10,9 +10,11 @@ from src.config_import import validate_data
 
 def data_validation(df):
 
-    # CHECK EXPECTED DATA VALUES
+    # ============================================================
+    # 1. CHECK EXPECTED DATA VALUES
+    # ============================================================
 
-
+    
     # convert true false column in boolean
 
     df = df.withColumn("Login Successful", col("Login Successful").cast("boolean"))
@@ -51,7 +53,10 @@ def data_validation(df):
         raise ValueError(f"DATA VALUE: match data type is {len(shared_items)} instead of 16") #raise error if  the  exp and data type is not full match
 
 
-    # CHECK NOT NULL COLUMN
+    # ============================================================
+    # 2. CHECK NOT NULL COLUMN
+    # ============================================================
+
 
     not_null_col = ["index", "User ID", "IP Address", "Login Timestamp"]
 
@@ -64,7 +69,10 @@ def data_validation(df):
         raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
 
 
-    # CHECK MAX VALUE % OF NULL VALUE IN COL
+    # ============================================================
+    # 3. CHECK MAX VALUE % OF NULL VALUE IN COL
+    # ============================================================
+
 
     # % null x col
     max_null_perc = {
@@ -124,8 +132,11 @@ def data_validation(df):
     if total_row != distinct_index:
         raise ValueError("Col index dont have all distinct value")
 
+    
+    # ============================================================
+    # 4. CHECK ALL COUNTRY ARE ONLY 2 LETTER
+    # ============================================================
 
-    # CHECK ALL COUNTRY ARE ONLY 2 LETTER
 
     # query for find the row that have more then 2 o less than 1 of country letter ex ITA instead of IT
 
@@ -145,7 +156,9 @@ def data_validation(df):
         raise ValueError(f"There is a Country with more than 2 letters or less: {result_dict}") # raise if find row with 1 or more than 2
 
 
-    # CHECK IF THE DF  HAVE EXPECTED ROW RANGE
+    # ============================================================
+    # 5. CHECK IF THE DF  HAVE EXPECTED ROW RANGE
+    # ============================================================
 
 
     expect_row_range = {"min": 30_000_000, "max": 60_000_000}
@@ -153,9 +166,12 @@ def data_validation(df):
 
     if total_row < expect_row_range["min"] or total_row > expect_row_range["max"]:
         raise ValueError(f"Row count {total_row} out of range [{expect_row_range['min']}, {expect_row_range['max']}]") # raise if row count go lower or up the range
-    
 
-    # CHECK FOR DUP ROW
+    
+    # ============================================================
+    # 6. CHECK FOR DUP ROW
+    # ============================================================
+     
 
     distinct = df.distinct().count()
     duplicates = total_row - distinct
@@ -163,8 +179,11 @@ def data_validation(df):
     if duplicates != 0:
         raise ValueError(f"DUPLICATE_ROW: {duplicates} row are duplicated") # raise if dup row
 
+    
+    # ============================================================
+    # 7. FILL DEVICE NULL TO UNKNOWN
+    # ============================================================
 
-    # FILL DEVICE NULL TO UNKNOWN
 
     df = df.na.fill("unknown", subset=["Device Type"])
 

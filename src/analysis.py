@@ -3,6 +3,9 @@ from pyspark.sql import SparkSession
 
 def analysis(spark,df):
 
+    df.createOrReplaceTempView("loggins")
+
+    
 
     # ============================================================
     # 1. GENERAL OVERVIEW KPI

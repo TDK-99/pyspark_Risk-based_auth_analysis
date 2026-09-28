@@ -19,7 +19,7 @@ services:
       -  ./ivy-cache:/tmp/.ivy2:z
     ports:
       - "8888:8888"
-      - "4040:4040"
+       # - "4040:4040" for test in jy and look the analysis is the spark job
     depends_on:
       - spark-master
 
@@ -59,10 +59,14 @@ services:
   job:
     build:
       dockerfile: Dockerfile.jupyter
-    command: spark-submit --master spark://spark-master:7077 /app/main.py
+    command: spark-submit --master spark://spark-master:7077 --conf spark.jars.ivy=/tmp/.ivy2 --packages org.apache.hadoop:hadoop-aws:3.4.1 /app/main.py
+    ports:
+      - "4040:4040"
     volumes:
       - .:/app:z
       - ./ivy-cache:/tmp/.ivy2:z
+    env_file:
+      - .env
     depends_on:
       - spark-master
       - spark-worker-1

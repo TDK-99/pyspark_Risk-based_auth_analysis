@@ -36,7 +36,7 @@ def analysis(spark,df):
     # 2. ATTACKS BY HOUR
     # ============================================================
 
-    
+
     results["attacks_by_hour"] = spark.sql("""
         SELECT HOUR(`Login Timestamp`) as hour,
                COUNT(*) as total_logins,
@@ -123,3 +123,34 @@ def analysis(spark,df):
     """).toPandas()
  
     return results
+
+def export_to_excel(results):
+    """
+    Export analysis results to Excel buffer, one sheet per analysis.
+    Returns bytes ready to upload to S3.
+    """
+
+    buffer_excel = BytesIO()
+
+    with pd.ExcelWriter(buffer_excel, engine="openpyxl") as writer:
+        for sheet_name, df in results.items():
+            df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+
+    bytes_excel = buffer_excel.getvalue()
+
+    s3 = boto3.client("s3")
+
+    # upload to S3
+    s3.put_object(
+        Bucket="sparkanalysisauth",
+        Key=f"output/rba_analysis_{today}.xlsx",
+        Body=bytes_excel
+    )
+    
+    print("Report upload on S3",flush=True)
+
+    return bytes_excel
+
+
+

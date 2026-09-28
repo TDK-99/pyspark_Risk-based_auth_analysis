@@ -15,7 +15,7 @@ today= date.today()
 
 load_dotenv(".env", override=True)
 
-def send_email(results,bytes_excel):
+def send_email(bytes_excel):
 
    
 

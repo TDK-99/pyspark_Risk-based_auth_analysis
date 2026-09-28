@@ -124,7 +124,7 @@ def analysis(spark,df):
  
     return results
 
-def export_to_excel(results):
+def export_and_upload(results):
     """
     Export analysis results to Excel buffer, one sheet per analysis.
     Returns bytes ready to upload to S3.

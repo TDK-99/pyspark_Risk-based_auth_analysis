@@ -130,6 +130,8 @@ def export_to_excel(results):
     Returns bytes ready to upload to S3.
     """
 
+    # use buffer for in cache excel creation
+
     buffer_excel = BytesIO()
 
     with pd.ExcelWriter(buffer_excel, engine="openpyxl") as writer:
@@ -138,6 +140,8 @@ def export_to_excel(results):
 
 
     bytes_excel = buffer_excel.getvalue()
+
+    # upload on s3 with boto3
 
     s3 = boto3.client("s3")
 

@@ -62,8 +62,8 @@ def data_validation(spark,df):
         null_count = df.filter(col(c).isNull()).count()
     
     # check if col have dont have null value if raise error
-    if 0 < null_count < df.count():
-        raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
+        if 0 < null_count < df.count():
+            raise ValueError(f"COLUMN_NOT_NULL:{c} column shouldn't have {null_count} null values") # raise error if a column of list have a single 1 null value
 
 
     # ============================================================

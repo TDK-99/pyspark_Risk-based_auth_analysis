@@ -4,11 +4,8 @@ from pyspark.sql.functions import col, count, when, sum as _sum, countDistinct, 
 import pandas as pd
 
 
-from src.config_import import validate_data
 
-
-
-def data_validation(df):
+def data_validation(spark,df):
 
     # ============================================================
     # 1. CHECK EXPECTED DATA VALUES
@@ -186,6 +183,9 @@ def data_validation(df):
 
 
     df = df.na.fill("unknown", subset=["Device Type"])
+
+
+    return spark, df
 
 
     

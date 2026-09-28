@@ -1,6 +1,5 @@
 FROM apache/spark:4.2.0
 USER root
-FROM python:3.14-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
